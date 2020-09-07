@@ -4,14 +4,14 @@
 \alias{ssBetaPars}
 \title{Compute the sum of squares between the theoretical and observed quantiles of a beta distribution.}
 \usage{
-ssBetaPars(abPars, pLow, pUpp, alpha = 0.05)
+ssBetaPars(abPars, qLow, qUpp, alpha = 0.05)
 }
 \arguments{
 \item{abPars}{The shape1 and shape2 parameters of the theoretical beta distribution.}
 
-\item{pLow}{The observed lower quantile .}
+\item{qLow}{The observed lower quantile.}
 
-\item{pUpp}{The observed upper quantile.}
+\item{qUpp}{The observed upper quantile.}
 
 \item{alpha}{The confidence level; i.e. the desired coverage is 1-alpha. Defaults to 0.05.}
 }

@@ -6,7 +6,7 @@
 #' @param prevEst The reported prevalence point estimate.
 #' @param sens The known assay sensitivity.
 #' @param spec The known assay specificity.
-#' @param replaceImpossibleValues Logical; not all combinations of prevalence, sensitivity and specificity are possible and it can be that the adjusted prevalence is <0 or >1, so if this parameter is set to TRUE, values below 0 are set to 0 and values above 1 are set to 1.
+#' @param replaceImpossibleValues Logical; not all combinations of prevalence, sensitivity and specificity are possible and it can be that the adjusted prevalence is <0 or >1, so if this parameter is set to TRUE, values below 0 are set to 0, values above 1 to 1. Default to FALSE.
 #'
 #' @return A vector of the same length as prevEst, returning the adjusted prevalence estimates.
 #'
@@ -70,9 +70,9 @@ adjPrevSensSpec<-function(prevEst,sens,spec,replaceImpossibleValues=FALSE){
 
 adjPrevSensSpecCI<-function(prevCI,sensCI,specCI,N=1e6,method="hdi",alpha=0.05,doPlot=FALSE,prev=NULL,sens=NULL,spec=NULL,ylim=NULL){
 
-  prevDist<-getBetaFromCI(pLow=prevCI[1],pUpp=prevCI[2])
-  sensDist<-getBetaFromCI(pLow=sensCI[1],pUpp=sensCI[2])
-  specDist<-getBetaFromCI(pLow=specCI[1],pUpp=specCI[2])
+  prevDist<-getBetaFromCI(qLow=prevCI[1],qUpp=prevCI[2],alpha=alpha)
+  sensDist<-getBetaFromCI(qLow=sensCI[1],qUpp=sensCI[2],alpha=alpha)
+  specDist<-getBetaFromCI(qLow=specCI[1],qUpp=specCI[2],alpha=alpha)
 
   distList<-list(prevDist$r,sensDist$r,specDist$r)
   combFun<-function(pars){adjPrevSensSpec(prevEst=pars[[1]],sens=pars[[2]],spec=pars[[3]])}
@@ -101,6 +101,7 @@ adjPrevSensSpecCI<-function(prevCI,sensCI,specCI,N=1e6,method="hdi",alpha=0.05,d
     legend(x="top",col=c("steelblue","orange","salmon"),legend=c("prevalence","sensitivity","specificity"),lwd=2,horiz=TRUE,bty="n")
 
     hist(adjPrevCI$bootstrapValues,breaks=100,freq=FALSE,xlab="adjusted prevalence",ylab="density",xlim=c(0,1),main="Histogram of the sensitivity- & specificity-adjusted prevalence")
+    box()
     abline(v=adjPrevCI$conf.int[1],lty=2,lwd=2,col="steelblue")
     abline(v=adjPrevCI$conf.int[2],lty=2,lwd=2,col="steelblue")
     if(!is.null(prev) & !is.null(sens) & !is.null(spec)){
@@ -112,7 +113,7 @@ adjPrevSensSpecCI<-function(prevCI,sensCI,specCI,N=1e6,method="hdi",alpha=0.05,d
   if(!is.null(prev) & !is.null(sens) & !is.null(spec)){
     res<-list(estimate=adjPrev,conf.int=adjPrevCI$conf.int)
   }else{
-    res<-list(cestimate=NULL,conf.int=adjPrevCI$conf.int)
+    res<-list(estimate=NULL,conf.int=adjPrevCI$conf.int)
   }
     return(res)
 }

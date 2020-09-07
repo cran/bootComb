@@ -5,17 +5,17 @@
 \title{Determine the parameters of the best-fit beta distribution for a given confidence interval for a probability parameter.}
 \usage{
 identifyBetaPars(
-  pLow,
-  pUpp,
+  qLow,
+  qUpp,
   alpha = 0.05,
   initPars = c(50, 50),
   maxiter = 1000
 )
 }
 \arguments{
-\item{pLow}{The observed lower quantile .}
+\item{qLow}{The observed lower quantile.}
 
-\item{pUpp}{The observed upper quantile.}
+\item{qUpp}{The observed upper quantile.}
 
 \item{alpha}{The confidence level; i.e. the desired coverage is 1-alpha. Defaults to 0.05.}
 
@@ -24,7 +24,7 @@ identifyBetaPars(
 \item{maxiter}{Maximum number of iterations for \code{optim}. Defaults to 1e3. Set to higher values if convergence problems are reported.}
 }
 \value{
-A vector of length 2 giving the 2 parameter shape1 and shape1 for use with rbeta/dbeta/pbeta/qbeta
+A vector of length 2 giving the 2 parameters shape1 and shape1 for use with rbeta/dbeta/pbeta/qbeta.
 }
 \description{
 Finds the best-fit beta distribution parameters for a given confidence interval for a probability parameter and returns the shape1, shape2 parameters.

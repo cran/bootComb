@@ -4,12 +4,12 @@
 \alias{getBetaFromCI}
 \title{Find the best-fit beta distribution for a given confidence interval for a probability parameter.}
 \usage{
-getBetaFromCI(pLow, pUpp, alpha = 0.05, initPars = c(50, 50), maxiter = 1000)
+getBetaFromCI(qLow, qUpp, alpha = 0.05, initPars = c(50, 50), maxiter = 1000)
 }
 \arguments{
-\item{pLow}{The observed lower quantile .}
+\item{qLow}{The observed lower quantile.}
 
-\item{pUpp}{The observed upper quantile.}
+\item{qUpp}{The observed upper quantile.}
 
 \item{alpha}{The confidence level; i.e. the desired coverage is 1-alpha. Defaults to 0.05.}
 
@@ -23,13 +23,13 @@ A list with 5 elements:
 \item{d}{The density function.}
 \item{p}{The distribution function.}
 \item{q}{The quantile function.}
-\item{pars}{A vector of length 2 giving the two shape parameters for the best-fit normal distribution (\code{shape1} and \code{shape2} as in \code{\link{rbeta}}, \code{\link{dbeta}}, \code{\link{pbeta}}, \code{\link{qbeta}}.}
+\item{pars}{A vector of length 2 giving the two shape parameters for the best-fit beta distribution (\code{shape1} and \code{shape2} as in \code{\link{rbeta}}, \code{\link{dbeta}}, \code{\link{pbeta}}, \code{\link{qbeta}}).}
 }
 \description{
 Finds the best-fit beta distribution for a given confidence interval for a probability parameter; returns the corresponding density, distribution, quantile and sampling functions.
 }
 \examples{
-b<-getBetaFromCI(pLow=0.1167,pUpp=0.1636,initPars=c(200,800))
+b<-getBetaFromCI(qLow=0.1167,qUpp=0.1636,initPars=c(200,800))
 print(b$pars) # the fitted parameter values
 b$r(10) # 10 random values from the fitted beta distribution
 b$d(0.15) # the probability density at x=0.15 for the fitted beta distribution

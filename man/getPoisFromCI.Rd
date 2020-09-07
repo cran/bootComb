@@ -4,12 +4,12 @@
 \alias{getPoisFromCI}
 \title{Find the best-fit Poisson distribution for a given confidence interval.}
 \usage{
-getPoisFromCI(pLow, pUpp, alpha = 0.05, initPars = 5, maxiter = 1000)
+getPoisFromCI(qLow, qUpp, alpha = 0.05, initPars = 5, maxiter = 1000)
 }
 \arguments{
-\item{pLow}{The observed lower quantile .}
+\item{qLow}{The observed lower quantile.}
 
-\item{pUpp}{The observed upper quantile.}
+\item{qUpp}{The observed upper quantile.}
 
 \item{alpha}{The confidence level; i.e. the desired coverage is 1-alpha. Defaults to 0.05.}
 
@@ -23,13 +23,13 @@ A list with 5 elements:
 \item{d}{The probability mass function.}
 \item{p}{The distribution function.}
 \item{q}{The quantile function.}
-\item{pars}{A vector of length 1 giving the rate parameter for the best-fit Poisson distribution (\code{lambda} as in \code{\link{rpois}}, \code{\link{dpois}}, \code{\link{ppois}}, \code{\link{qpois}}.}
+\item{pars}{A single number giving the rate parameter for the best-fit Poisson distribution (\code{lambda} as in \code{\link{rpois}}, \code{\link{dpois}}, \code{\link{ppois}}, \code{\link{qpois}}).}
 }
 \description{
-Finds the best-fit Poisson distribution for a given confidence interval; returns the corresponding density, distribution, quantile and sampling functions.
+Finds the best-fit Poisson distribution for a given confidence interval; returns the corresponding probability mass, distribution, quantile and sampling functions.
 }
 \examples{
-n<-getPoisFromCI(pLow=9,pUpp=22)
+n<-getPoisFromCI(qLow=9,qUpp=22)
 print(n$par) # the fitted parameter value (lambda)
 n$r(10) # 10 random values from the fitted Poisson distribution
 n$d(6) # the probability mass at x=6 for the Poisson distribution

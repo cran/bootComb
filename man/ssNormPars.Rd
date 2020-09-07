@@ -4,14 +4,14 @@
 \alias{ssNormPars}
 \title{Compute the sum of squares between the theoretical and observed quantiles of a normal / Gaussian distribution.}
 \usage{
-ssNormPars(muSigPars, pLow, pUpp, alpha = 0.05)
+ssNormPars(muSigPars, qLow, qUpp, alpha = 0.05)
 }
 \arguments{
 \item{muSigPars}{The mean and standard deviation parameters of the theoretical normal distribution.}
 
-\item{pLow}{The observed lower quantile .}
+\item{qLow}{The observed lower quantile.}
 
-\item{pUpp}{The observed upper quantile.}
+\item{qUpp}{The observed upper quantile.}
 
 \item{alpha}{The confidence level; i.e. the desired coverage is 1-alpha. Defaults to 0.05.}
 }

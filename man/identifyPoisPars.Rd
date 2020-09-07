@@ -4,12 +4,12 @@
 \alias{identifyPoisPars}
 \title{Determine the parameters of the best-fit Poisson distribution for a given confidence interval.}
 \usage{
-identifyPoisPars(pLow, pUpp, alpha = 0.05, initPars = 5, maxiter = 1000)
+identifyPoisPars(qLow, qUpp, alpha = 0.05, initPars = 5, maxiter = 1000)
 }
 \arguments{
-\item{pLow}{The observed lower quantile .}
+\item{qLow}{The observed lower quantile.}
 
-\item{pUpp}{The observed upper quantile.}
+\item{qUpp}{The observed upper quantile.}
 
 \item{alpha}{The confidence level; i.e. the desired coverage is 1-alpha. Defaults to 0.05.}
 
@@ -18,11 +18,11 @@ identifyPoisPars(pLow, pUpp, alpha = 0.05, initPars = 5, maxiter = 1000)
 \item{maxiter}{Maximum number of iterations for \code{optim}. Defaults to 1e3. Set to higher values if convergence problems are reported.}
 }
 \value{
-A single number giving the rate parameter for use with rpois/dpois/ppois/qpois
+A single number giving the rate parameter for use with rpois/dpois/ppois/qpois.
 }
 \description{
 Finds the best-fit Poisson distribution parameters for a given confidence interval and returns the rate parameter.
 }
 \seealso{
-\code{\link{ssPoisPar}}, \code{\link{optim}}, \code{\link{dpois}}
+\code{\link{ssPoisPars}}, \code{\link{optim}}, \code{\link{dpois}}
 }

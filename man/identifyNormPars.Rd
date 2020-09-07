@@ -4,12 +4,12 @@
 \alias{identifyNormPars}
 \title{Determine the parameters of the best-fit normal / Gaussian distribution for a given confidence interval.}
 \usage{
-identifyNormPars(pLow, pUpp, alpha = 0.05, initPars = c(0, 1), maxiter = 1000)
+identifyNormPars(qLow, qUpp, alpha = 0.05, initPars = c(0, 1), maxiter = 1000)
 }
 \arguments{
-\item{pLow}{The observed lower quantile .}
+\item{qLow}{The observed lower quantile.}
 
-\item{pUpp}{The observed upper quantile.}
+\item{qUpp}{The observed upper quantile.}
 
 \item{alpha}{The confidence level; i.e. the desired coverage is 1-alpha. Defaults to 0.05.}
 
@@ -18,7 +18,7 @@ identifyNormPars(pLow, pUpp, alpha = 0.05, initPars = c(0, 1), maxiter = 1000)
 \item{maxiter}{Maximum number of iterations for \code{optim}. Defaults to 1e3. Set to higher values if convergence problems are reported.}
 }
 \value{
-A vector of length 2 giving the 2 parameter mean and sd for use with rnorm/dnorm/pnorm/qnorm
+A vector of length 2 giving the 2 parameters mean and sd for use with rnorm/dnorm/pnorm/qnorm.
 }
 \description{
 Finds the best-fit normal distribution parameters for a given confidence interval and returns the mean and sd parameters.

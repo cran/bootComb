@@ -4,12 +4,12 @@
 \alias{getNormFromCI}
 \title{Find the best-fit normal / Gaussian distribution for a given confidence interval.}
 \usage{
-getNormFromCI(pLow, pUpp, alpha = 0.05, initPars = c(0, 1), maxiter = 1000)
+getNormFromCI(qLow, qUpp, alpha = 0.05, initPars = c(0, 1), maxiter = 1000)
 }
 \arguments{
-\item{pLow}{The observed lower quantile .}
+\item{qLow}{The observed lower quantile.}
 
-\item{pUpp}{The observed upper quantile.}
+\item{qUpp}{The observed upper quantile.}
 
 \item{alpha}{The confidence level; i.e. the desired coverage is 1-alpha. Defaults to 0.05.}
 
@@ -23,13 +23,13 @@ A list with 5 elements:
 \item{d}{The density function.}
 \item{p}{The distribution function.}
 \item{q}{The quantile function.}
-\item{pars}{A vector of length 2 giving the mean and standard deviation for the best-fit normal distribution (\code{mean} and \code{sd} as in \code{\link{rnorm}}, \code{\link{dnorm}}, \code{\link{pnorm}}, \code{\link{qnorm}}.}
+\item{pars}{A vector of length 2 giving the mean and standard deviation for the best-fit normal distribution (\code{mean} and \code{sd} as in \code{\link{rnorm}}, \code{\link{dnorm}}, \code{\link{pnorm}}, \code{\link{qnorm}}).}
 }
 \description{
 Finds the best-fit normal distribution for a given confidence interval; returns the corresponding density, distribution, quantile and sampling functions.
 }
 \examples{
-n<-getNormFromCI(pLow=1.08,pUpp=8.92)
+n<-getNormFromCI(qLow=1.08,qUpp=8.92)
 print(n$pars) # the fitted parameter values (mean & sd)
 n$r(10) # 10 random values from the fitted normal distribution
 n$d(6) # the probability density at x=6 for the normal distribution

@@ -13,7 +13,7 @@ adjPrevSensSpec(prevEst, sens, spec, replaceImpossibleValues = FALSE)
 
 \item{spec}{The known assay specificity.}
 
-\item{replaceImpossibleValues}{Logical; not all combinations of prevalence, sensitivity and specificity are possible and it can be that the adjusted prevalence is <0 or >1, so if this parameter is set to TRUE, values below 0 are set to 0 and values above 1 are set to 1.}
+\item{replaceImpossibleValues}{Logical; not all combinations of prevalence, sensitivity and specificity are possible and it can be that the adjusted prevalence is <0 or >1, so if this parameter is set to TRUE, values below 0 are set to 0, values above 1 to 1. Default to FALSE.}
 }
 \value{
 A vector of the same length as prevEst, returning the adjusted prevalence estimates.

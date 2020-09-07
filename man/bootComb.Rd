@@ -8,7 +8,7 @@ bootComb(
   distList,
   combFun,
   N = 1e+06,
-  method = "hdi",
+  method = "quantile",
   coverage = 0.95,
   doPlot = FALSE,
   legPos = "topright",
@@ -23,7 +23,7 @@ bootComb(
 
 \item{N}{The number of bootstrap samples to take. Defaults to 1e6.}
 
-\item{method}{The method uses to derive a confidence interval from the empirical distribution of the combined parameter.Needs to be one of 'hdi' (default; computes the highest density interval) or 'quantile (uses quantiles to derive the confidence interval).}
+\item{method}{The method uses to derive a confidence interval from the empirical distribution of the combined parameter.Needs to be one of 'quantile' (default; uses the percentile method to derive the confidence interval) or hdi' (computes the highest density interval).}
 
 \item{coverage}{The desired coverage of the resulting confidence interval.Defaults to 0.95.}
 
@@ -33,7 +33,7 @@ bootComb(
 
 \item{returnBootVals}{Logical; if TRUE then the parameter values computed from the boostrapped input parameter values will be returned; defaults to FALSE.}
 
-\item{validRange}{Optional; if not NULL, a vector of length 2 giving the range within which the values obtained from the bootstrapped input parameters must lie; values outside this range will be discarded.}
+\item{validRange}{Optional; if not NULL, a vector of length 2 giving the range within which the values obtained from the bootstrapped input parameters must lie; values outside this range will be discarded. Behaviour that results in the need for this option arises when parameters are not independent. Use with caution.}
 }
 \value{
 A list with 2 elements:
@@ -47,11 +47,11 @@ Finally either the percentile method is used or the highest density interval is 
 }
 \examples{
 ## Example 1 - product of 2 probability parameters for which only the 95\% CIs are reported
-dist1<-getBetaFromCI(pLow=0.4,pUpp=0.6,alpha=0.05)
-dist2<-getBetaFromCI(pLow=0.7,pUpp=0.9,alpha=0.05)
+dist1<-getBetaFromCI(qLow=0.4,qUpp=0.6,alpha=0.05)
+dist2<-getBetaFromCI(qLow=0.7,qUpp=0.9,alpha=0.05)
 distListEx<-list(dist1$r,dist2$r)
 combFunEx<-function(pars){pars[[1]]*pars[[2]]}
-bootComb(distList=distListEx,combFun=combFunEx,doPlot=TRUE)
+bootComb(distList=distListEx,combFun=combFunEx,doPlot=TRUE,method="hdi")
 
 ## Example 2 - sum of 3 Gaussian distributions
 dist1<-function(n){rnorm(n,mean=5,sd=3)}
