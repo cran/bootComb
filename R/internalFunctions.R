@@ -40,7 +40,7 @@ ssBetaPars<-function(abPars,qLow,qUpp,alpha=0.05){
 identifyBetaPars<-function(qLow,qUpp,alpha=0.05,initPars=c(50,50),maxiter=1e3){
   if(qLow<0 | qUpp>1 | qLow>qUpp){stop("qLow and qUpp need to be both contained within [0,1] and qLow needs to be lower than qUpp.")}
 
-  res<-suppressWarnings(optim(fn=ssBetaPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter)))
+  res<-suppressWarnings(optim(fn=ssBetaPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter),alpha=alpha))
   if(res$convergence!=0){stop("optim() as called by identifyBetaPars() failed to converge.")}
 
   return(res$par)
@@ -90,7 +90,7 @@ ssNormPars<-function(muSigPars,qLow,qUpp,alpha=0.05){
 identifyNormPars<-function(qLow,qUpp,alpha=0.05,initPars=c(0,1),maxiter=1e3){
   if(qLow>qUpp){stop("qLow needs to be lower than qUpp.")}
 
-  res<-suppressWarnings(optim(fn=ssNormPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter)))
+  res<-suppressWarnings(optim(fn=ssNormPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter),alpha=alpha))
   if(res$convergence!=0){stop("optim() as called by identifyNormPars() failed to converge.")}
 
   return(res$par)
@@ -140,7 +140,7 @@ ssPoisPars<-function(poisPar,qLow,qUpp,alpha=0.05){
 identifyPoisPars<-function(qLow,qUpp,alpha=0.05,initPars=5,maxiter=1e3){
   if(qLow>qUpp){stop("qLow needs to be lower than qUpp.")}
 
-  res<-suppressWarnings(optim(fn=ssPoisPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter)))
+  res<-suppressWarnings(optim(fn=ssPoisPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter),alpha=alpha))
   if(res$convergence!=0){stop("optim() as called by identifyPoisPar() failed to converge.")}
 
   return(res$par)
@@ -190,7 +190,7 @@ ssNegBinPars<-function(sizeProbPars,qLow,qUpp,alpha=0.05){
 identifyNegBinPars<-function(qLow,qUpp,alpha=0.05,initPars=c(10,0.5),maxiter=1e3){
   if(qLow>qUpp){stop("qLow needs to be lower than qUpp.")}
 
-  res<-suppressWarnings(optim(fn=ssNegBinPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter)))
+  res<-suppressWarnings(optim(fn=ssNegBinPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter),alpha=alpha))
   if(res$convergence!=0){stop("optim() as called by identifyNegBinPars() failed to converge.")}
 
   return(res$par)
@@ -240,7 +240,7 @@ ssGammaPars<-function(shapeRatePars,qLow,qUpp,alpha=0.05){
 identifyGammaPars<-function(qLow,qUpp,alpha=0.05,initPars=c(1,1),maxiter=1e3){
   if(qLow>qUpp){stop("qLow needs to be lower than qUpp.")}
 
-  res<-suppressWarnings(optim(fn=ssGammaPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter)))
+  res<-suppressWarnings(optim(fn=ssGammaPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter),alpha=alpha))
   if(res$convergence!=0){stop("optim() as called by identifyGammaPars() failed to converge.")}
 
   return(res$par)
@@ -291,7 +291,7 @@ ssExpPars<-function(ratePar,qLow,qUpp,alpha=0.05){
 identifyExpPars<-function(qLow,qUpp,alpha=0.05,initPars=1,maxiter=1e3){
   if(qLow>qUpp){stop("qLow needs to be lower than qUpp.")}
 
-  res<-suppressWarnings(optim(fn=ssExpPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter)))
+  res<-suppressWarnings(optim(fn=ssExpPars,qLow=qLow,qUpp=qUpp,par=initPars,control=list(maxit=maxiter),alpha=alpha))
   if(res$convergence!=0){stop("optim() as called by identifyExpPar() failed to converge.")}
 
   return(res$par)
