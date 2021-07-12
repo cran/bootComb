@@ -5,6 +5,16 @@
 
 Deriving confidence intervals for combinations of independent parameter estimates.
 
+## Citation
+
+Please use the following to cite the use of this R package in publications:
+
+*  Henrion, M.Y.R. (2021). bootComb - An R Package to Derive Confidence Intervals for Combinations of Independent Parameter Estimates. International
+  Journal of Epidemiology, dyab049. https://doi.org/10.1093/ije/dyab049
+
+*  Henrion, M.Y.R. (2021). bootComb: Combine Parameter Estimates via Parametric Bootstrap. R package version 1.0.1.9000.
+  https://CRAN.R-project.org/package=bootComb
+
 ## Description
 
 This is an R package to combine several estimates via a arbitrary function to compute a new parameter.

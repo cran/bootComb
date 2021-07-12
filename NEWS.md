@@ -1,3 +1,8 @@
+# bootComb 1.0.2
+
+* Citation information updated now the IJE paper is out. Please cite https://doi.org/10.1093/ije/dyab049 when using the package.
+* Updated the function `adjPrevSensSpecCI` for better behaviour in the case where the provided point estimates for the prevalence, sensitivity and specificity result in an impossible value (adjusted prevalence point estimate <0 or >1). The adjusted point estimates and boundaries of CI have now been updated to avoid impossible values and be consistent with each other (e.g. if the adjusted point estimate would be -0.000123, the lower boundary from the bootstrapping 0.000451 and the upper boundary 0.112345, then the reported point estimate and CI will be 0 [0,0.112345]).
+
 # bootComb 1.0.1
 
 * Fixed a bug with the internal functions `identifyBetaPars`, `identifyNormPars`, `identifyPoisPars`, `identifyNegBinPars`, `identifyGammaPars`, `identifyExpPars` whereby the `alpha` parameter did not get passed through.

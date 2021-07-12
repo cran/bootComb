@@ -36,6 +36,7 @@ adjPrevSensSpec<-function(prevEst,sens,spec,replaceImpossibleValues=FALSE){
 #' @description
 #' This function takes as input a prevalence confidence interval, a sensitivity confidence interval and a specificity confidence interval and returns a confidence interval with the desired coverage of the adjusted prevalence.
 #' Optionally the point estimates of prevalence, sensitivity and specificity can also be specified and, if so, these will be returned together with the confidence interval.
+#' This function will automatically replace impossible point estimate values with 0 (if estimate <0) or 1 (if estimate >1) and also update the lower, repsectively upper confidence interval limit in this case.
 #'
 #' @param prevCI A vector of length 2 giving the lower and upper bounds of the confidence interval for the prevalence estimate.
 #' @param sensCI A vector of length 2 giving the lower and upper bounds of the confidence interval for the assay sensitivity estimate.
@@ -78,7 +79,7 @@ adjPrevSensSpecCI<-function(prevCI,sensCI,specCI,N=1e6,method="hdi",alpha=0.05,d
   combFun<-function(pars){adjPrevSensSpec(prevEst=pars[[1]],sens=pars[[2]],spec=pars[[3]])}
 
   if(!is.null(prev) & !is.null(sens) & !is.null(spec)){
-    adjPrev<-adjPrevSensSpec(prev,sens,spec)
+    adjPrev<-adjPrevSensSpec(prev,sens,spec,replaceImpossibleValues=TRUE)
   }
 
   adjPrevCI<-bootComb(distList=distList,combFun=combFun,N=N,method=method,coverage=1-alpha,doPlot=FALSE,legPos=NULL,returnBootVals=TRUE,validRange=c(0,1))
@@ -111,6 +112,8 @@ adjPrevSensSpecCI<-function(prevCI,sensCI,specCI,N=1e6,method="hdi",alpha=0.05,d
   }
 
   if(!is.null(prev) & !is.null(sens) & !is.null(spec)){
+    if(adjPrev<adjPrevCI$conf.int[1]){adjPrevCI$conf.int[1]<-adjPrev}
+    if(adjPrev>adjPrevCI$conf.int[2]){adjPrevCI$conf.int[2]<-adjPrev}
     res<-list(estimate=adjPrev,conf.int=adjPrevCI$conf.int)
   }else{
     res<-list(estimate=NULL,conf.int=adjPrevCI$conf.int)

@@ -1,0 +1,26 @@
+citHeader("To cite bootComb in publications use:")
+
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+citEntry(
+  entry    = "Article",
+  title    = "bootComb - An R Package to Derive Confidence Intervals for Combinations of Independent Parameter Estimates",
+  author   = personList(as.person("Marc Y. R. Henrion")),
+  journal  = "International Journal of Epidemiology",
+  year     = "2021",
+  volume   = "dyab049",
+  doi      = "10.1093/ije/dyab049",
+  url      = "https://doi.org/10.1093/ije/dyab049",
+  textVersion = paste("Henrion, M.Y.R. (2021). bootComb - An R Package to Derive Confidence Intervals for Combinations of Independent Parameter Estimates. International Journal of Epidemiology, dyab049. https://doi.org/10.1093/ije/dyab049.")
+)
+
+citEntry(
+  entry    = "Manual",
+  title    = "bootComb: Combine Parameter Estimates via Parametric Bootstrap",
+  author   = personList(as.person("Marc Y. R. Henrion")),
+  year     = year,
+  note     = note,
+  url      = "https://CRAN.R-project.org/package=bootComb",
+  textVersion = paste0("Henrion, M.Y.R. (",year,"). bootComb: Combine Parameter Estimates via Parametric Bootstrap. ",note,". https://CRAN.R-project.org/package=bootComb.")
+)
