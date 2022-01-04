@@ -49,6 +49,7 @@ A list object with 2 elements:
 \description{
 This function takes as input a prevalence confidence interval, a sensitivity confidence interval and a specificity confidence interval and returns a confidence interval with the desired coverage of the adjusted prevalence.
 Optionally the point estimates of prevalence, sensitivity and specificity can also be specified and, if so, these will be returned together with the confidence interval.
+This function will automatically replace impossible point estimate values with 0 (if estimate <0) or 1 (if estimate >1) and also update the lower, repsectively upper confidence interval limit in this case.
 }
 \examples{
 adjPrevSensSpecCI(

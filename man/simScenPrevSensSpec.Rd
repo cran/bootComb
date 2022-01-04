@@ -47,7 +47,7 @@ This is a simulation to compute the coverage of the confidence interval returned
 }
 \examples{
 \donttest{
-simScenPrevSensSpec(p=0.15,sens=0.85,spec=0.90,nExp=300,nExpSens=600,nExpSpec=400,B=1000)
+simScenPrevSensSpec(p=0.15,sens=0.85,spec=0.90,nExp=300,nExpSens=600,nExpSpec=400,B=100)
   # B value only for convenience here
   # Increase B to 1e3 or 1e4 (be aware this may run for some time).
  }

@@ -14,3 +14,4 @@ export(simScenProductTwoPrevs)
 
 importFrom("stats", "quantile","binom.test", "optim", "rbinom", "dbeta", "qbeta", "pbeta", "rbeta", "dnorm", "qnorm", "pnorm", "rnorm", "dpois", "qpois", "ppois", "rpois", "dnbinom", "qnbinom", "pnbinom", "rnbinom", "dgamma", "qgamma", "pgamma", "rgamma", "dexp", "qexp", "pexp", "rexp")
 importFrom("graphics", "plot", "abline", "hist", "layout", "legend", "lines", "par", "box")
+importFrom("MASS", "mvrnorm")

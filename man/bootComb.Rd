@@ -8,20 +8,36 @@ bootComb(
   distList,
   combFun,
   N = 1e+06,
+  distributions = NULL,
+  qLowVect = NULL,
+  qUppVect = NULL,
+  alphaVect = 0.05,
+  Sigma = NULL,
   method = "quantile",
   coverage = 0.95,
   doPlot = FALSE,
   legPos = "topright",
   returnBootVals = FALSE,
-  validRange = NULL
+  validRange = NULL,
+  seed = NULL
 )
 }
 \arguments{
-\item{distList}{A list object where each element of the list is a sampling function for a probability distribution function (i.e. like rnorm, rbeta, ...).}
+\item{distList}{If \code{Sigma} is set to NULL, this is a list object where each element of the list is a sampling function for a probability distribution function (i.e. like rnorm, rbeta, ...). If \code{Sigma} is specified, then this needs to be a list of quantile functions for the distributions for each parameter.}
 
 \item{combFun}{The function to combine the different estimates to a new parameter. Needs to take a single list as input argument, one element of the list for each estimate. This list input argument needs to be a list of same length as distList.}
 
 \item{N}{The number of bootstrap samples to take. Defaults to 1e6.}
+
+\item{distributions}{Alternatively to specifying \code{distlist}, the parameters \code{distributions}, \code{qLowVect}, \code{qUppVect} and (optionally) \code{alphaVect} can be specified. The first 3 of these need t be either all specified and be vectors of the same length or all set to NULL. The \code{distributions} parameter needs to be a vector specifying the names of the distributions for each parameter (one of "beta", "exponential", "gamma", "normal", "Poisson" or "NegativeBinomial").}
+
+\item{qLowVect}{Alternatively to specifying \code{distlist}, the parameters \code{distributions}, \code{qLowVect}, \code{qUppVect} and (optionally) \code{alphaVect} can be specified. The first 3 of these need t be either all specified and be vectors of the same length or all set to NULL. The \code{qLowVect} parameter needs to be a vector specifying the lower confidence interval limits for each parameter.}
+
+\item{qUppVect}{Alternatively to specifying \code{distlist}, the parameters \code{distributions}, \code{qLowVect}, \code{qUppVect} and (optionally) \code{alphaVect} can be specified. The first 3 of these need t be either all specified and be vectors of the same length or all set to NULL. The \code{qUppVect} parameter needs to be a vector specifying the upper confidence interval limits for each parameter.}
+
+\item{alphaVect}{Alternatively to specifying \code{distlist}, the parameters \code{distributions}, \code{qLowVect}, \code{qUppVect} and (optionally) \code{alphaVect} can be specified. The first 3 of these need t be either all specified and be vectors of the same length or all set to NULL. The \code{alphaVect} parameter needs to be a vector specifying the alpha level (i.e. 1 minus the coverage) of each confidence interval. Can be specified as a single number if the same for all parameters. Defaults to 0.05.}
+
+\item{Sigma}{Set to NULL if parameters are assumed to be independent (the default). If specified, this needs to be a valid covariance matrix for a multivariate normal distribution with variances equal to 1 for all variables (in other words, this really is a correlation matrix).}
 
 \item{method}{The method uses to derive a confidence interval from the empirical distribution of the combined parameter.Needs to be one of 'quantile' (default; uses the percentile method to derive the confidence interval) or hdi' (computes the highest density interval).}
 
@@ -31,14 +47,17 @@ bootComb(
 
 \item{legPos}{Legend position (only used if doPlot==TRUE); either NULL (no legend) or one of "top", "topleft", "topright", "bottom", "bottomleft", "bottomright" "left", "right", "center".}
 
-\item{returnBootVals}{Logical; if TRUE then the parameter values computed from the boostrapped input parameter values will be returned; defaults to FALSE.}
+\item{returnBootVals}{Logical; if TRUE then the parameter values computed from the bootstrapped input parameter values will be returned; values for the individual parameters will be reported as a second list element; defaults to FALSE.}
 
 \item{validRange}{Optional; if not NULL, a vector of length 2 giving the range within which the values obtained from the bootstrapped input parameters must lie; values outside this range will be discarded. Behaviour that results in the need for this option arises when parameters are not independent. Use with caution.}
+
+\item{seed}{If desired a random seed can be specified so that the same results can be reproduced.}
 }
 \value{
-A list with 2 elements:
+A list with 3 elements:
 \item{conf.int}{A vector of length 2 giving the lower and upper limits of the computed confidence interval.}
-\item{bootstrapValues}{A vector containing the computed parameter values from the bootstrap samples of the input parameters. (Only non-NULL if \code{returnBootVals} is set to TRUE)}
+\item{bootstrapValues}{A vector containing the computed / combined parameter values from the bootstrap samples of the input parameters. (Only non-NULL if \code{returnBootVals} is set to TRUE.)}
+\item{bootstrapValuesInput}{A list where each element is the vector of the bootstrapped values for the corresponding input parameter. This can be useful to check the dependence structure that was specified. (Only non-NULL if \code{returnBootVals} is set to TRUE.)}
 }
 \description{
 This package propagates uncertainty from several estimates when combining these estimates via a function.
@@ -51,7 +70,23 @@ dist1<-getBetaFromCI(qLow=0.4,qUpp=0.6,alpha=0.05)
 dist2<-getBetaFromCI(qLow=0.7,qUpp=0.9,alpha=0.05)
 distListEx<-list(dist1$r,dist2$r)
 combFunEx<-function(pars){pars[[1]]*pars[[2]]}
-bootComb(distList=distListEx,combFun=combFunEx,doPlot=TRUE,method="hdi")
+bootComb(distList=distListEx,
+         combFun=combFunEx,
+         doPlot=TRUE,
+         method="hdi",
+         N=1e5, # reduced from N=1e6 so that it runs quicker; larger values => more accurate
+         seed=352)
+
+# Alternatively, the same example can be run in just 2 lines of code:
+combFunEx<-function(pars){pars[[1]]*pars[[2]]}
+bootComb(distributions=c("beta","beta"),
+         qLowVect=c(0.4,0.7),
+         qUppVect=c(0.6,0.9),
+         combFun=combFunEx,
+         doPlot=TRUE,
+         method="hdi",
+         N=1e5, # reduced from N=1e6 so that it runs quicker; larger values => more accurate
+         seed=352)
 
 ## Example 2 - sum of 3 Gaussian distributions
 dist1<-function(n){rnorm(n,mean=5,sd=3)}
@@ -69,6 +104,18 @@ y<-dnorm(x,mean=5+2+1,sd=sqrt(3^2+2^2+0.5^2))
 lines(x,y,col="red")
 abline(v=exactCI[1],col="red",lty=3)
 abline(v=exactCI[2],col="red",lty=3)
+
+## Example 3 - same as Example 1 but assuming the 2 parameters to be dependent / correlated
+combFunEx<-function(pars){pars[[1]]*pars[[2]]}
+bootComb(distributions=c("beta","beta"),
+         qLowVect=c(0.4,0.7),
+         qUppVect=c(0.6,0.9),
+         Sigma=matrix(byrow=2,ncol=2,c(1,0.5,0.5,1)),
+         combFun=combFunEx,
+         doPlot=TRUE,
+         method="hdi",
+         N=1e5, # reduced from N=1e6 so that it runs quicker; larger values => more accurate
+         seed=352)
 
 }
 \seealso{
