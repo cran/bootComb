@@ -96,6 +96,7 @@ getNormFromCI<-function(qLow,qUpp,alpha=0.05,initPars=c(0,1),maxiter=1e3){
 #'
 #' @description
 #' Finds the best-fit Poisson distribution for a given confidence interval; returns the corresponding probability mass, distribution, quantile and sampling functions.
+#' The use of this function within the bootComb package is limited: this is a discrete distribution but since users provide confidence intervals, the corresponding parameters will be best approximated by continuous distributions.
 #'
 #' @param qLow The observed lower quantile.
 #' @param qUpp The observed upper quantile.
@@ -143,6 +144,7 @@ getPoisFromCI<-function(qLow,qUpp,alpha=0.05,initPars=5,maxiter=1e3){
 #'
 #' @description
 #' Finds the best-fit negative binomial distribution for a given confidence interval; returns the corresponding probability mass, distribution, quantile and sampling functions.
+#' The use of this function within the bootComb package is limited: this is a discrete distribution but since users provide confidence intervals, the corresponding parameters will be best approximated by continuous distributions.
 #'
 #' @param qLow The observed lower quantile.
 #' @param qUpp The observed upper quantile.

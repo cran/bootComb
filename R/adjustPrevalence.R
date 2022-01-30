@@ -44,15 +44,20 @@ adjPrevSensSpec<-function(prevEst,sens,spec,replaceImpossibleValues=FALSE){
 #' @param N A (large) integer giving the number of parametric bootstrap samples to take. Defaults to 1e6.
 #' @param method The method uses to derive a confidence interval from the empirical distribution of the combined parameter. Needs to be one of 'hdi' (default; computes the highest density interval) or 'quantile (uses quantiles to derive the confidence interval).
 #' @param alpha The desired confidence level; i.e. the returned confidence interval will have coverage 1-alpha.
+#' @param Sigma Set to NULL if parameters are assumed to be independent (the default). If specified, this needs to be a valid 3x3 covariance matrix for a multivariate normal distribution with variances equal to 1 for all variables (in other words, this really is a correlation matrix).
 #' @param doPlot Logical; indicates whether a graph should be produced showing the input estimated distributions for the prevalence, sensitivity and specificity estimates and the resulting empirical distribution of the adjusted prevalence together with the reported confidence interval. Defaults to FALSE.
 #' @param prev Optional; if not NULL, and parameters \code{sens} and \code{spec} are also not NULL, then an adjusted point estimate will also be calculated.
 #' @param sens Optional; if not NULL, and parameters \code{prev} and \code{spec} are also not NULL, then an adjusted point estimate will also be calculated.
 #' @param spec Optional; if not NULL, and parameters \code{prev} and \code{sens} are also not NULL, then an adjusted point estimate will also be calculated.
 #' @param ylim Optional; a vector of length 2, giving the vertical limits for the top panel of the produced plot. Only used if \code{doPlot} is set to \code{TRUE}.
+#' @param returnBootVals Logical; if TRUE then the parameter values computed from the bootstrapped input parameter values will be returned; values for the individual parameters will be reported as a second list element; defaults to FALSE.
+#' @param seed If desired a random seed can be specified so that the same results can be reproduced (this gets passed to function \code{bootComb}).
 #'
-#' @return A list object with 2 elements:
+#' @return A list object with 4 elements:
 #' \item{estimate}{The adjusted prevalence point estimate (only non-NULL if \code{prev}, \code{sens} and \code{spec} are specified).}
 #' \item{conf.int}{The confidence interval for the adjusted prevalence.}
+#' \item{bootstrapValues}{A vector containing the bootstrapped adjusted prevalence values from the bootstrap samples of the input parameters. (Only non-NULL if \code{returnBootVals} is set to TRUE.)}
+#' \item{bootstrapValuesInput}{A list where each element is the vector of the bootstrapped values for the corresponding input parameters (prevalence, sensitivity, specificity). This can be useful to check the dependence structure that was specified. (Only non-NULL if \code{returnBootVals} is set to TRUE.)}
 #'
 #' @seealso
 #' \code{\link{bootComb}}, \code{\link{adjPrevSensSpec}}, \code{\link{identifyBetaPars}}, \code{\link{dbeta}}, \code{\link[HDInterval]{hdi}}
@@ -69,20 +74,24 @@ adjPrevSensSpec<-function(prevEst,sens,spec,replaceImpossibleValues=FALSE){
 #'
 #' @export adjPrevSensSpecCI
 
-adjPrevSensSpecCI<-function(prevCI,sensCI,specCI,N=1e6,method="hdi",alpha=0.05,doPlot=FALSE,prev=NULL,sens=NULL,spec=NULL,ylim=NULL){
+adjPrevSensSpecCI<-function(prevCI,sensCI,specCI,N=1e6,method="hdi",alpha=0.05,Sigma=NULL,doPlot=FALSE,prev=NULL,sens=NULL,spec=NULL,ylim=NULL,returnBootVals=FALSE,seed=NULL){
 
   prevDist<-getBetaFromCI(qLow=prevCI[1],qUpp=prevCI[2],alpha=alpha)
   sensDist<-getBetaFromCI(qLow=sensCI[1],qUpp=sensCI[2],alpha=alpha)
   specDist<-getBetaFromCI(qLow=specCI[1],qUpp=specCI[2],alpha=alpha)
 
-  distList<-list(prevDist$r,sensDist$r,specDist$r)
+  if(is.null(Sigma)){
+    distList<-list(prevDist$r,sensDist$r,specDist$r)
+  }else{
+    distList<-list(prevDist$q,sensDist$q,specDist$q)
+  }
   combFun<-function(pars){adjPrevSensSpec(prevEst=pars[[1]],sens=pars[[2]],spec=pars[[3]])}
 
   if(!is.null(prev) & !is.null(sens) & !is.null(spec)){
     adjPrev<-adjPrevSensSpec(prev,sens,spec,replaceImpossibleValues=TRUE)
   }
 
-  adjPrevCI<-bootComb(distList=distList,combFun=combFun,N=N,method=method,coverage=1-alpha,doPlot=FALSE,legPos=NULL,returnBootVals=TRUE,validRange=c(0,1))
+  adjPrevCI<-bootComb(distList=distList,combFun=combFun,Sigma=Sigma,N=N,method=method,coverage=1-alpha,doPlot=FALSE,legPos=NULL,returnBootVals=TRUE,validRange=c(0,1),seed=seed)
 
   if(doPlot){
     oldpar <- par(no.readonly = TRUE)
@@ -111,12 +120,19 @@ adjPrevSensSpecCI<-function(prevCI,sensCI,specCI,N=1e6,method="hdi",alpha=0.05,d
     legend(x="top",bty="n",horiz=TRUE,lwd=2,lty=2,col=c("steelblue","orange"),legend=c("95% confidence limits","point estimate"))
   }
 
+  if(!returnBootVals){
+    adjPrevCI$bootstrapValues<-NULL
+    adjPrevCI$bootstrapValuesInput<-NULL
+  }else{
+    names(adjPrevCI$bootstrapValuesInput)<-c("prev","sens","spec")
+  }
+
   if(!is.null(prev) & !is.null(sens) & !is.null(spec)){
     if(adjPrev<adjPrevCI$conf.int[1]){adjPrevCI$conf.int[1]<-adjPrev}
     if(adjPrev>adjPrevCI$conf.int[2]){adjPrevCI$conf.int[2]<-adjPrev}
-    res<-list(estimate=adjPrev,conf.int=adjPrevCI$conf.int)
+    res<-list(estimate=adjPrev,conf.int=adjPrevCI$conf.int,bootstrapValues=adjPrevCI$bootstrapValues,bootstrapValuesInput=adjPrevCI$bootstrapValuesInput)
   }else{
-    res<-list(estimate=NULL,conf.int=adjPrevCI$conf.int)
+    res<-list(estimate=NULL,conf.int=adjPrevCI$conf.int,bootstrapValues=adjPrevCI$bootstrapValues,bootstrapValuesInput=adjPrevCI$bootstrapValuesInput)
   }
-    return(res)
+  return(res)
 }

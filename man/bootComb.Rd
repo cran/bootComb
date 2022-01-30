@@ -110,7 +110,7 @@ combFunEx<-function(pars){pars[[1]]*pars[[2]]}
 bootComb(distributions=c("beta","beta"),
          qLowVect=c(0.4,0.7),
          qUppVect=c(0.6,0.9),
-         Sigma=matrix(byrow=2,ncol=2,c(1,0.5,0.5,1)),
+         Sigma=matrix(byrow=TRUE,ncol=2,c(1,0.5,0.5,1)),
          combFun=combFunEx,
          doPlot=TRUE,
          method="hdi",

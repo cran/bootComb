@@ -1,3 +1,11 @@
+# bootComb 1.1.2
+
+* Added the option to specify a dependence structure in `adjPrevSensSpecCI` (i.e. argument `Sigma` allowed and passed through to `bootComb`).
+* Added the option to specify a seed value for `adjPrevSensSpecCI`.
+* Added the option for bootstrapped values to be returned for `adjPrevSensSpecCI`.
+* Added a note to the documentation files for getPoisFromCI and getNegBinFromCI - these two functions are unlikely to be of much use within bootComb (where parameters are necessarily assumed to be continuous).
+* Minor fix to one example.
+
 # bootComb 1.1.1
 
 * Reduced the number of bootstrap samples for the example used for the `bootComb` example as CRAN gave an error that examples take over 10s to run.

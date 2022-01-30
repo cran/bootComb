@@ -11,11 +11,14 @@ adjPrevSensSpecCI(
   N = 1e+06,
   method = "hdi",
   alpha = 0.05,
+  Sigma = NULL,
   doPlot = FALSE,
   prev = NULL,
   sens = NULL,
   spec = NULL,
-  ylim = NULL
+  ylim = NULL,
+  returnBootVals = FALSE,
+  seed = NULL
 )
 }
 \arguments{
@@ -31,6 +34,8 @@ adjPrevSensSpecCI(
 
 \item{alpha}{The desired confidence level; i.e. the returned confidence interval will have coverage 1-alpha.}
 
+\item{Sigma}{Set to NULL if parameters are assumed to be independent (the default). If specified, this needs to be a valid 3x3 covariance matrix for a multivariate normal distribution with variances equal to 1 for all variables (in other words, this really is a correlation matrix).}
+
 \item{doPlot}{Logical; indicates whether a graph should be produced showing the input estimated distributions for the prevalence, sensitivity and specificity estimates and the resulting empirical distribution of the adjusted prevalence together with the reported confidence interval. Defaults to FALSE.}
 
 \item{prev}{Optional; if not NULL, and parameters \code{sens} and \code{spec} are also not NULL, then an adjusted point estimate will also be calculated.}
@@ -40,11 +45,17 @@ adjPrevSensSpecCI(
 \item{spec}{Optional; if not NULL, and parameters \code{prev} and \code{sens} are also not NULL, then an adjusted point estimate will also be calculated.}
 
 \item{ylim}{Optional; a vector of length 2, giving the vertical limits for the top panel of the produced plot. Only used if \code{doPlot} is set to \code{TRUE}.}
+
+\item{returnBootVals}{Logical; if TRUE then the parameter values computed from the bootstrapped input parameter values will be returned; values for the individual parameters will be reported as a second list element; defaults to FALSE.}
+
+\item{seed}{If desired a random seed can be specified so that the same results can be reproduced (this gets passed to function \code{bootComb}).}
 }
 \value{
-A list object with 2 elements:
+A list object with 4 elements:
 \item{estimate}{The adjusted prevalence point estimate (only non-NULL if \code{prev}, \code{sens} and \code{spec} are specified).}
 \item{conf.int}{The confidence interval for the adjusted prevalence.}
+\item{bootstrapValues}{A vector containing the bootstrapped adjusted prevalence values from the bootstrap samples of the input parameters. (Only non-NULL if \code{returnBootVals} is set to TRUE.)}
+\item{bootstrapValuesInput}{A list where each element is the vector of the bootstrapped values for the corresponding input parameters (prevalence, sensitivity, specificity). This can be useful to check the dependence structure that was specified. (Only non-NULL if \code{returnBootVals} is set to TRUE.)}
 }
 \description{
 This function takes as input a prevalence confidence interval, a sensitivity confidence interval and a specificity confidence interval and returns a confidence interval with the desired coverage of the adjusted prevalence.

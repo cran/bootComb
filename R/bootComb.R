@@ -75,7 +75,7 @@
 #' bootComb(distributions=c("beta","beta"),
 #'          qLowVect=c(0.4,0.7),
 #'          qUppVect=c(0.6,0.9),
-#'          Sigma=matrix(byrow=2,ncol=2,c(1,0.5,0.5,1)),
+#'          Sigma=matrix(byrow=TRUE,ncol=2,c(1,0.5,0.5,1)),
 #'          combFun=combFunEx,
 #'          doPlot=TRUE,
 #'          method="hdi",
@@ -128,7 +128,7 @@ bootComb<-function(distList,combFun,N=1e6,distributions=NULL,qLowVect=NULL,qUppV
     }
   }else{
     if(sum(diag(Sigma)!=rep(1,nrow(Sigma)))>0){stop("All diagonal elements of the Sigma matrix need to be equal to 1.")}
-    parsNorm<-MASS::mvrnorm(n=N,mu=rep(0,k),Sigma=Sigma)
+    parsNorm<-MASS::mvrnorm(n=N,mu=rep(0,length(distList)),Sigma=Sigma)
     parsNorm<-pnorm(parsNorm)
     for(k in 1:length(distList)){
       pars[[k]]<-distList[[k]](parsNorm[,k])

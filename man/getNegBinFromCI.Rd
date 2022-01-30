@@ -33,6 +33,7 @@ A list with 5 elements:
 }
 \description{
 Finds the best-fit negative binomial distribution for a given confidence interval; returns the corresponding probability mass, distribution, quantile and sampling functions.
+The use of this function within the bootComb package is limited: this is a discrete distribution but since users provide confidence intervals, the corresponding parameters will be best approximated by continuous distributions.
 }
 \examples{
 n<-getNegBinFromCI(qLow=1.96,qUpp=19.12)
